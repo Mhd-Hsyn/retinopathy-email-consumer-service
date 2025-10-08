@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+
+  ai_call_assistant-fastapi-email-service:
+    build:
+      context: .  # Build the image from the Dockerfile in the current directory
+    restart: always  # Automatically restart the container on failure
+    container_name: ai_call_assistant_saas-fastapi-email-container
+    working_dir: /ai_call_assistant_saas_email_service
+    volumes:
+      - .:/ai_call_assistant_saas_email_service  # Mount the current directory
+    ports:
+      - 9020:9007  # FastAPI default port
+    networks:
+      - ai_call_assistant_saas_backend_network
+
+networks:
+  ai_call_assistant_saas_backend_network:
+    external: true

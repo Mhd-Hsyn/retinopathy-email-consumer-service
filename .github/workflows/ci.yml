@@ -1,0 +1,49 @@
+name: CI Pipeline
+on:
+  push:
+    branches:
+      - beta-master
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Create .env file
+      run: |
+        
+        sudo sh -c 'echo "RABBITMQ_HOST=${{ secrets.RABBITMQ_HOST }}" >> .env'
+        sudo sh -c 'echo "RABBITMQ_PORT=${{ secrets.RABBITMQ_PORT }}" >> .env'
+        sudo sh -c 'echo "RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}" >> .env'
+        sudo sh -c 'echo "RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }}" >> .env'
+
+        sudo sh -c 'echo "RABBITMQ_QUEE=${{ secrets.RABBITMQ_QUEE }}" >> .env'
+        sudo sh -c 'echo "RABBITMQ_EXCHANGE=${{ secrets.RABBITMQ_EXCHANGE }}" >> .env'
+        sudo sh -c 'echo "RABBITMQ_ROUTING_KEY=${{ secrets.RABBITMQ_ROUTING_KEY }}" >> .env'
+
+
+        sudo sh -c 'echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" >> .env'
+        sudo sh -c 'echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env'
+        sudo sh -c 'echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> .env'
+        sudo sh -c 'echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> .env'
+        
+
+        sudo sh -c 'echo "LOGIN_URL=${{ secrets.LOGIN_URL }}" >> .env'
+        sudo sh -c 'echo "COMPANY_NAME=${{ secrets.COMPANY_NAME }}" >> .env'
+        sudo sh -c 'echo "COMPANY_LOGO=${{ secrets.COMPANY_LOGO }}" >> .env'
+
+        sudo sh -c 'echo "ENCRYPTION_SECRET_KEY=${{ secrets.ENCRYPTION_SECRET_KEY }}" >> .env'
+
+
+    - name: Create Docker network if not exists
+      run: |
+        sudo docker network ls | grep law_firm_crm-backend-network || docker network create law_firm_crm-backend-network
+  
+    - name: Build and Run Docker compose
+      run: |
+        sudo docker compose down
+        sudo docker compose up --build -d
+
+        

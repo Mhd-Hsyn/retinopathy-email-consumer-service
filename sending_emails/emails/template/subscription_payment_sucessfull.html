@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Subscription Confirmation</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f7fa;">
+  <table width="100%" cellspacing="0" cellpadding="0" style="background-color: #f5f7fa; padding: 30px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0px 2px 10px rgba(0,0,0,0.05); overflow: hidden;">
+          
+          <!-- Header -->
+          <tr>
+            <td style="background-color: #2c3e50; padding: 20px; text-align: center;">
+              <h1 style="color: #ffffff; font-size: 22px; margin: 0;">🎉 Subscription Successful!</h1>
+            </td>
+          </tr>
+
+          <!-- Greeting -->
+          <tr>
+            <td style="padding: 25px 30px; color: #333333;">
+              <p style="font-size: 16px; margin: 0 0 10px 0;">Hi <strong>[full_name]</strong>,</p>
+              <p style="font-size: 15px; margin: 0 0 20px 0;">Your subscription to <strong>[package_name]</strong> has been successfully activated.</p>
+            </td>
+          </tr>
+
+          <!-- Package Detail -->
+          <tr>
+            <td style="padding: 0 30px 20px 30px;">
+              <h3 style="color: #2c3e50; font-size: 18px;">📦 Package Details</h3>
+              <table width="100%" cellpadding="8" cellspacing="0" style="font-size: 14px;">
+                <tr>
+                  <td style="font-weight: bold;">Package Name:</td>
+                  <td>[package_name]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Duration:</td>
+                  <td>[package_duration]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Lawyers Allowed:</td>
+                  <td>[no_of_lawyers]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Cases per Lawyer:</td>
+                  <td>[no_of_case_per_lawyer]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Cost per Lawyer:</td>
+                  <td>$[base_cost_per_lawyer]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Cost per Case:</td>
+                  <td>$[base_cost_per_case]</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Payment Detail -->
+          <tr>
+            <td style="padding: 0 30px 20px 30px;">
+              <h3 style="color: #2c3e50; font-size: 18px;">💳 Payment Details</h3>
+              <table width="100%" cellpadding="8" cellspacing="0" style="font-size: 14px;">
+                <tr>
+                  <td style="font-weight: bold;">Invoice Number:</td>
+                  <td>[invoice_number]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Invoice ID:</td>
+                  <td>[invoice_id]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Amount:</td>
+                  <td>$[amount] [currency]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Payment Status:</td>
+                  <td>[payment_status]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Hosted Invoice:</td>
+                  <td><a href="[hosted_invoice_url]" style="color: #007bff;">View Online</a></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Download PDF:</td>
+                  <td><a href="[invoice_pdf]" style="color: #007bff;">Download Invoice</a></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Subscription Meta -->
+          <tr>
+            <td style="padding: 0 30px 30px 30px;">
+              <h3 style="color: #2c3e50; font-size: 18px;">📄 Subscription Info</h3>
+              <table width="100%" cellpadding="8" cellspacing="0" style="font-size: 14px;">
+                <tr>
+                  <td style="font-weight: bold;">Subscription ID:</td>
+                  <td>[stripe_subscription_id]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Customer ID:</td>
+                  <td>[stripe_customer_id]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Status:</td>
+                  <td>[subscription_status]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Subscription Expires:</td>
+                  <td>[expiration_date]</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold;">Subscription Starts:</td>
+                  <td>[created_at]</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #f0f0f0; padding: 20px; text-align: center; font-size: 13px; color: #888888;">
+              If you have any questions, feel free to contact our support team.<br />
+              &copy; [current_year] [company_name]. All rights reserved.
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
