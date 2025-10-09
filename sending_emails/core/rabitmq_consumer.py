@@ -13,11 +13,6 @@ from sending_emails.core.config import (
 )
 from sending_emails.emails.send_mails import (
     send_otp,
-    send_welcome_email_law_firm_account_create,
-    send_subscription_payment_sucessfull,
-    send_welcome_email_lawyer_account_create,
-    send_welcome_email_client_account_create,
-    send_assigned_task_email,
 
 )
 
@@ -48,7 +43,7 @@ def continous_consuming_rabitmq_messages(loop_behavior:str)->None:
             queue=rabbitmq_quee,
             routing_key=rabbitmq_routing_key,
         )
-        logger.info("Law Firm Email Sending Consumer Service RabbitMQ Connection Channel: %s", rabbitmq_quee)
+        logger.info("AI Call Assistant Email Sending Consumer Service RabbitMQ Connection Channel: %s", rabbitmq_quee)
         channel.basic_consume(
             queue=rabbitmq_quee,
             on_message_callback=rabitmq_consumer_callback,
@@ -79,17 +74,11 @@ def rabitmq_consumer_callback(ch, method, properties, body)->bool:
     logging.info("********* user_payload ------ >>>>  %s",user_payload)
 
     event = user_payload.get("event")
-    if not event == "lawfirm_crm_send_mail":
-        logger.info("Received invalid event: %s", event)
-        return FAILURE
-    email_type = user_payload.get("email_type")
-    print("\n\n ****** email_type _________________ ", email_type)
 
     # for otp sending email
-    if email_type == "user_otp_request":
+    if event == "user_otp_request":
         data = user_payload.get("data")
         print("data is :::::::::::: \n ", data)
-        print("email_type is :::::::::::: \n ", email_type)
         send_otp(
             user_email= data.get("user_email"),
             user_fullname= data.get("user_fullname"),
@@ -100,48 +89,12 @@ def rabitmq_consumer_callback(ch, method, properties, body)->bool:
             otp= data.get("otp"),
         )
     
-    # for Law-Firm new acount created send credentials
-    elif email_type == "lawfirm_account_created":
-        data = user_payload.get("data")
-        send_welcome_email_law_firm_account_create(
-            data = data,
-            email = data['email'],
-        )
-
-    elif email_type == "subscription_payment_sucessfull":
-        data = user_payload.get("data")
-        send_subscription_payment_sucessfull(
-            data = data,
-            email = data['email'],
-        )
     
-    # for lawyer new acount created send credentials
-    elif email_type == "lawyer_account_created":
-        data = user_payload.get('data')
-        send_welcome_email_lawyer_account_create(
-            email= data['email'],
-            data= data
-        )
-
-    # for lawyer new acount created send credentials
-    elif email_type == "client_account_created":
-        data = user_payload.get('data')
-        send_welcome_email_client_account_create(
-            email= data['email'],
-            data= data
-        )
-
-    elif email_type == "assigned_task_notification":
-        data = user_payload.get("data")
-        send_assigned_task_email(
-            email=data['email'],
-            data=data
-        )
         
         
 
     else:
-        logger.info("Received unknown email type: %s", email_type)
+        logger.info("Received invalid event: %s", event)
         return FAILURE
 
     logger.info("Processed message: %s", message)
