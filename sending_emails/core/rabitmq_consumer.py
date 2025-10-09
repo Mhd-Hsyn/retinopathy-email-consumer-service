@@ -12,7 +12,7 @@ from sending_emails.core.config import (
     rabbitmq_routing_key,
 )
 from sending_emails.emails.send_mails import (
-    send_otp,
+    send_otp_email,
 
 )
 
@@ -79,19 +79,8 @@ def rabitmq_consumer_callback(ch, method, properties, body)->bool:
     if event == "user_otp_request":
         data = user_payload.get("data")
         print("data is :::::::::::: \n ", data)
-        send_otp(
-            user_email= data.get("user_email"),
-            user_fullname= data.get("user_fullname"),
-            otp_reason= data.get("otp_reason"),
-            otp_expiry_time= data.get("otp_expiry_time"),
-            new_otp_request_time= data.get("new_otp_request_time"),
-            otp_request_at = data.get("otp_request_at"),
-            otp= data.get("otp"),
-        )
+        send_otp_email(data=data)
     
-    
-        
-        
 
     else:
         logger.info("Received invalid event: %s", event)

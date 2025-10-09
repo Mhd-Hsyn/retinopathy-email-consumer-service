@@ -1,87 +1,46 @@
 import os
-import ssl
-import smtplib
 from decouple import config
 from datetime import datetime
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from sending_emails.emails.config import (
-    EMAIL_HOST_USER,
-    EMAIL_HOST_PASSWORD,
-    EMAIL_HOST,
-    EMAIL_PORT
-)
+from typing import Dict
 import logging
-logger = logging.getLogger("collubi_email_service_logger")
+from sending_emails.emails.encryption_utils import decrypt_data
+from .helpers import (
+    render_template,
+    send_email
+)
 
+logger = logging.getLogger("ai_call_assistant_service_logger")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+COMPANY_NAME = config("COMPANY_NAME")
+COMPANY_LOGO = config("COMPANY_LOGO")
+
+TEMPLATE_FOLDER_PATH="sending_emails/emails/template"
 
 
 
-
-
-def send_otp(
-        user_email: str,
-        user_fullname: str,
-        otp_reason: str,
-        otp_expiry_time:str,
-        new_otp_request_time:str,
-        otp_request_at: str,
-        otp: str,
-):
-    
+def send_otp_email(data: Dict[str, str]) -> bool:
+    """Send OTP verification email."""
+    template = f"{TEMPLATE_FOLDER_PATH}/send_otp.html"
     current_year = str(datetime.now().year)
-    company_name = config('COMPANY_NAME')
 
-    sender_email = EMAIL_HOST_USER
+    replacements = {
+        "user_fullname": data.get("user_fullname"),
+        "otp_reason": data.get("otp_reason"),
+        "otp": decrypt_data(encrypted_data=data.get("otp")),
+        "otp_expiry_time": data.get("otp_expiry_time"),
+        "otp_request_at": data.get("otp_request_at"),
+        "new_otp_request_time": data.get("new_otp_request_time"),
+        "current_year": current_year,
+        "company_name": COMPANY_NAME,
+        "company_logo_url": COMPANY_LOGO,
+        "dynamic_info_1": data.get("dynamic_info_1"),
+        "dynamic_info_2": data.get("dynamic_info_2")
+    }
 
-    message = MIMEMultipart("alternative")
-    message["Subject"] = f"{otp_reason}"
-    message["From"] = sender_email
-    message["To"] = user_email
-
-    # Path to the email template
-    template_path = "sending_emails/emails/template/send_otp.html"
-    logger.info ("template_path ================ %s", template_path)
-
-    # Open and read the template HTML file
-    with open(template_path, "r", encoding="utf-8") as template_file:
-        html_content = template_file.read()
-
-    # Replace placeholders with actual values
-    html_content = html_content.replace("[user_fullname]", user_fullname)
-    html_content = html_content.replace("[otp_reason]", otp_reason)
-    html_content = html_content.replace("[otp]", otp)
-    html_content = html_content.replace("[otp_expiry_time]", otp_expiry_time)
-    html_content = html_content.replace("[otp_request_at]", otp_request_at)
-    html_content = html_content.replace("[new_otp_request_time]", new_otp_request_time)
-    html_content = html_content.replace("[current_year]", current_year)
-    html_content = html_content.replace("[company_name]", company_name)
-    
-
-    # Create the plain-text and HTML version of your message
-
-    # Turn these into plain/html MIMEText objects
-    # part1 = MIMEText(text, "plain")
-    part2 = MIMEText(html_content, "html")
-
-    # Add HTML/plain-text parts to MIMEMultipart message
-    # The email client will try to render the last part first
-    # message.attach(part1)
-    message.attach(part2)
-
-    # Create secure connection with server and send email
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL(EMAIL_HOST, EMAIL_PORT, context=context) as server:
-        server.login(sender_email, EMAIL_HOST_PASSWORD)
-
-        server.sendmail(
-            sender_email, user_email, message.as_string()
-        )
-
-    logger.info ("Email Send Successfully . . . ")
-    return True
+    html_content = render_template(template, replacements)
+    subject = data.get("otp_reason", "OTP Verification")
+    return send_email(subject, data.get("user_email"), html_content)
 
 
 
