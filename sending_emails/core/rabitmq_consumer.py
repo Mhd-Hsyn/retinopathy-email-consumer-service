@@ -13,8 +13,8 @@ from sending_emails.core.config import (
 )
 from sending_emails.emails.send_mails import (
     send_otp_email,
-    send_technician_credentials_create_by_hospital_admin_email
-
+    send_technician_credentials_create_by_hospital_admin_email,
+    send_doctor_credentials_create_by_hospital_admin_email,
 )
 
 
@@ -86,6 +86,11 @@ def rabitmq_consumer_callback(ch, method, properties, body)->bool:
         data = user_payload.get("data")
         print("data is :::::::::::: \n ", data)
         send_technician_credentials_create_by_hospital_admin_email(data=data)    
+
+    if event == "doctor_create_by_hospital_admin":
+        data = user_payload.get("data")
+        print("data is :::::::::::: \n ", data)
+        send_doctor_credentials_create_by_hospital_admin_email(data=data)   
 
     else:
         logger.info("Received invalid event: %s", event)
