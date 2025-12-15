@@ -13,8 +13,8 @@ services:
     ports:
       - 9020:9007  # FastAPI default port
     networks:
-      - ai_call_assistant_saas_backend_network
+      - fastapi_retinopathy_backend_network
 
 networks:
-  ai_call_assistant_saas_backend_network:
+  fastapi_retinopathy_backend_network:
     external: true
