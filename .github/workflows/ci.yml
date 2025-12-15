@@ -35,6 +35,7 @@ jobs:
         sudo sh -c 'echo "COMPANY_LOGO=${{ secrets.COMPANY_LOGO }}" >> .env'
 
         sudo sh -c 'echo "OTP_FERNET_KEY=${{ secrets.OTP_FERNET_KEY }}" >> .env'
+        sudo sh -c 'echo "ENCRYPTION_SECRET_KEY=${{ secrets.ENCRYPTION_SECRET_KEY }}" >> .env'
 
 
     - name: Create Docker network if not exists

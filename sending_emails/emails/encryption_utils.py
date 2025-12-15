@@ -12,3 +12,4 @@ def encrypt_data(data: str) -> str:
 def decrypt_data(encrypted_data: str) -> str:
     """Decrypt data when consuming from MQ."""
     return fernet.decrypt(encrypted_data.encode()).decode()
+
