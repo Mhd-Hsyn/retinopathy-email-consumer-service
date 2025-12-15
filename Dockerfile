@@ -1,7 +1,7 @@
 FROM python:3.10-slim
 
 # Set working directory
-WORKDIR /ai_call_assistant_saas_email_service
+WORKDIR /retinopathy_email_service
 
 # Copy requirements into the working directory
 COPY requirements.txt .
