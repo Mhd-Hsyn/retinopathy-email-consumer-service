@@ -43,4 +43,34 @@ def send_otp_email(data: Dict[str, str]) -> bool:
     return send_email(subject, data.get("user_email"), html_content)
 
 
+def send_technician_credentials_create_by_hospital_admin_email(
+    data: Dict[str, str]
+) -> bool:
+    """
+    Send technician credentials email created by hospital admin
+    """
+
+    template = f"{TEMPLATE_FOLDER_PATH}/technician_credentials.html"
+    current_year = str(datetime.now().year)
+
+    replacements = {
+        "user_fullname": data.get("user_fullname"),
+        "user_email": data.get("user_email"),
+        "hospital_name": data.get("hospital_name"),
+        "account_created": data.get("account_created"),
+        "password": decrypt_data(encrypted_data=data.get("password")),
+        "current_year": current_year,
+        "company_name": COMPANY_NAME,
+        "company_logo_url": COMPANY_LOGO,
+    }
+
+    html_content = render_template(template, replacements)
+
+    subject = "Your Technician Account Credentials"
+
+    return send_email(
+        subject=subject,
+        recipient=data.get("user_email"),
+        html_content=html_content
+    )
 
