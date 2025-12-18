@@ -75,14 +75,14 @@ def send_technician_credentials_create_by_hospital_admin_email(
     )
 
 
-def send_doctor_credentials_create_by_hospital_admin_email(
+def send_doctor_reviewer_credentials_create_by_hospital_admin_email(
     data: Dict[str, str]
 ) -> bool:
     """
     Send doctor credentials email created by hospital admin
     """
 
-    template = f"{TEMPLATE_FOLDER_PATH}/doctor_credentials.html"
+    template = f"{TEMPLATE_FOLDER_PATH}/doctor_reviewer_credentials.html"
     current_year = str(datetime.now().year)
 
     replacements = {
