@@ -142,3 +142,44 @@ def send_doctor_admin_credentials_create_by_hospital_admin_email(
 
 
 
+def notify_user_credentials_updated_by_hospital_admin_email(
+    data: Dict[str, str]
+) -> bool:
+    """
+    Send doctor credentials email created by hospital admin
+    """
+
+    template = f"{TEMPLATE_FOLDER_PATH}/credentials_updated_by_admin.html"
+    current_year = str(datetime.now().year)
+
+    ROLE_LABEL_MAP = {
+        "DOCTOR_ADMIN": "Doctor Administrator",
+        "DOCTOR_REVIEWER": "Doctor Reviewer",
+        "TECHNICIAN": "Technician"
+    }
+    user_role = ROLE_LABEL_MAP.get(data.get("role"), data.get("role"))
+
+    replacements = {
+        "user_fullname": data.get("user_fullname"),
+        "user_email": data.get("user_email"),
+        "hospital_name": data.get("hospital_name"),
+        "role": user_role,
+        "access_from": data.get("access_from"),
+        "credentials_updated_at": data.get("credentials_updated_at"),
+        "password": decrypt_data(encrypted_data=data.get("password")),
+        "current_year": current_year,
+        "company_name": COMPANY_NAME,
+        "company_logo_url": COMPANY_LOGO,
+    }
+
+    html_content = render_template(template, replacements)
+
+    subject = f"Your {user_role} Account Credentials"
+
+    return send_email(
+        subject=subject,
+        recipient=data.get("user_email"),
+        html_content=html_content
+    )
+
+
